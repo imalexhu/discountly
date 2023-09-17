@@ -10,11 +10,30 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Example {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Product {
+  id         Int      @id @default(autoincrement())
+  amazonAsin String
+  clicks     Int
+  websiteId  Int?
+  Website    Website? @relation(fields: [websiteId], references: [id])
 
-    @@index([name])
+}
+
+model Website {
+  id          Int       @id @default(autoincrement())
+  websiteName String
+  visits      Int
+  Products    Product[]
+
+  @@index([websiteName])
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  clicks    Int
+
+  @@index([name])
 }
