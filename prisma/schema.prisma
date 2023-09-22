@@ -11,29 +11,27 @@ generator client {
 }
 
 model Product {
-  id         Int      @id @default(autoincrement())
+  id         String @id @default(cuid())
   amazonAsin String
   clicks     Int
-  websiteId  Int?
-  Website    Website? @relation(fields: [websiteId], references: [id])
+  websiteId  String
 
+  @@index([websiteId])
 }
 
 model Website {
-  id          Int       @id @default(autoincrement())
+  id          String @id @default(cuid())
   websiteName String
   visits      Int
-  Products    Product[]
-
-  @@index([websiteName])
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
+  id        String   @id @default(cuid())
+  username  String?
+  fullName  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  clicks    Int
+  clicks    Int      @default(0)
 
-  @@index([name])
+  @@index([username])
 }
