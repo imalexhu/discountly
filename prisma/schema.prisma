@@ -24,14 +24,3 @@ model Website {
   websiteName String
   visits      Int
 }
-
-model User {
-  id        String   @id @default(cuid())
-  username  String?
-  fullName  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  clicks    Int      @default(0)
-
-  @@index([username])
-}

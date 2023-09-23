@@ -1,13 +1,31 @@
+import { currentUser, clerkClient } from "@clerk/nextjs";
 import { z } from "zod";
-
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/api/trpc";
 
 export const productRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ ctx, input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
+  userClick: protectedProcedure
+    .input(z.object({ productId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+
+      const clerkUser = ctx.authenticatedUser
+      const clicks: string = clerkUser.privateMetadata.clicks as string;
+      const updatedClicks = clicks ? parseInt(clicks) + 1 : 1
+
+      // increment click or initalise it
+      await clerkClient.users.updateUser(clerkUser.id, {
+        unsafeMetadata: {
+          clicks: updatedClicks.toString()
+        }
+      })
+
+
+      const product = ctx.prisma.product.update({
+        where: {
+          id: input.productId,
+        },
+        data: {
+          clicks: { increment: 1 }
+        }
+      })
     }),
 });

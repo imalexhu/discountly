@@ -6,12 +6,14 @@ import { Footer } from "./footer/footer";
 import { LandingPageHeader } from "./landingPage/header/header";
 export function NewUserLandingPage() {
 
-    return <>
-        <LandingPageHeader />
-        <LandingPageSaveSection/>
-        <LandingPageSimpleSection/>
-        <LandingPageMemberStats />
-        <LandingPageCTASection/>
-        <Footer />
-    </>
+    return (
+        <div className="flex justify-center flex-col w-full">
+            <LandingPageHeader />
+            <LandingPageSaveSection />
+            <LandingPageSimpleSection />
+            <LandingPageMemberStats />
+            <LandingPageCTASection />
+            <Footer />
+        </div >
+    )
 }

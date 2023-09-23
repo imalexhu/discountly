@@ -8,7 +8,6 @@ export default function Home() {
   const { isLoaded, isSignedIn, user } = useUser();
   const router = useRouter()
     
-
   useEffect(() => {
     if (user) {
       router.push("/search").catch((e)=>console.log(e))
