@@ -18,7 +18,6 @@ export const productRouter = createTRPCRouter({
         }
       })
 
-
       const product = ctx.prisma.product.update({
         where: {
           id: input.productId,
