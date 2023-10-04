@@ -14,18 +14,16 @@ model Product {
   id          String  @id @default(cuid())
   amazonAsin  String
   clicks      Int
-  websiteId   String
   websiteName String
   website     Website @relation(fields: [websiteName], references: [websiteName])
 
-  @@index([websiteId])
+  @@index([websiteName])
 }
 
 model Website {
   websiteName String    @id @unique
   searched    Int
   products    Product[]
-  productId   String
 
   @@index([websiteName])
 }

@@ -15,7 +15,7 @@ export const websiteRouter = createTRPCRouter({
           products: true
         }
       })
-      
+
       if (!website) {
         await ctx.prisma.website.create({
           data: {

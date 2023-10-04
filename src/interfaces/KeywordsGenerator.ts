@@ -1,3 +1,3 @@
 interface KeywordsGenerator {
-    getKeywords(innerTextContent: string): Array<string>
+    getKeywords(innerTextContent: string): Promise<string[]>
 }
