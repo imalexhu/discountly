@@ -22,13 +22,11 @@ export function addAmazonAffiliateTag(url: string): string {
 }
 
 
-const parseApiResult = (rawData: any): any[] => {
+const parseApiResult = (rawData: any): string[] => {
     const ret: any[] = [];
     for (const data of rawData.search_results) {
         if (!data.asin) continue;
-        ret.push({
-            asin: data.asin,
-        });
+        ret.push(data.asin as string);
     }
     return ret;
 };
@@ -40,9 +38,6 @@ const searchOnAmazon = async (params: RainforestSearchParams): Promise<unknown> 
         })
         .then((res) => {
             console.log("Got data successfully -- then");
-            console.log({
-                results: res.data,
-            });
             return res.data;
         })
         .catch((e) => {

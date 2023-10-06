@@ -37,9 +37,19 @@ const formatResponseMessage = (
 
 
 const amazonAsinsToProducts = (amazonAsins: string[], rootUrl: string): Prisma.ProductCreateManyInput[] => {
-    return amazonAsins.map((data) => ({ amazonAsin: data, clicks: 0, websiteName: rootUrl }))
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const ret = []
+    for (const data of amazonAsins) {
+        ret.push(
+            {
+                amazonAsin: data,
+                clicks: 0,
+                websiteName: rootUrl
+            }
+        )
+    }
+    return ret;
 }
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== 'POST') {
         res.status(405).send(formatResponseMessage(false, false, "Only POST requests allowed"))
@@ -65,20 +75,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const keywords = await getKeywords(data.innerTextContent)
         if (!keywords) res.status(400).send(formatResponseMessage(false, false, "Generating keywords failed"))
         const amazonAsins = await getAmazonAsins(keywords)
+        const createManyInput = amazonAsinsToProducts(amazonAsins, rootUrl!);
 
         const savedResults = await prisma.website.create({
-            data: {
-                websiteName: rootUrl!,
-                searched: 0,
-                products: {
-                    createMany: {
-                        data: amazonAsinsToProducts(amazonAsins, rootUrl!)
-                    }
+                data: {
+                    websiteName: rootUrl!,
+                    searched: 0,
                 }
+        })
+
+        const product = await prisma.product.createMany({
+            data: createManyInput
+        })
+
+        const result = await prisma.website.findUnique({
+            where: {
+                websiteName: rootUrl,
+            },
+            include: {
+                products: true
             }
         })
+
+
+        res.status(200).send(formatResponseMessage(true, false, "Data retrieved and saved in cachee", result!))
     }
-
-
 
 }

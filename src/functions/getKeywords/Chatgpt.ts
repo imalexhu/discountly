@@ -66,7 +66,7 @@ const validateChatGptKeyPhraseJson = (stringifiedJson: string): ChatGptReturn | 
 const chatGgtProxy = async (proompts: string[], runFromFrontEnd = false): Promise<string[]> => {
 
     const openai = new OpenAI({
-        apiKey: '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', // defaults to process.env["OPENAI_API_KEY"]
+        apiKey: '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', // defaults to process.env["OPENAI_API_KEY"]
     });
 
     // marcus
