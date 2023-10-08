@@ -12,10 +12,18 @@ generator client {
 
 model Product {
   id          String  @id @default(cuid())
-  amazonAsin  String
   clicks      Int
   websiteName String
-  website     Website @relation(fields: [websiteName], references: [websiteName])
+  position    Int  
+  title       String
+  asin        String
+  link        String  @db.Text
+  image       String
+  rating      Decimal
+  numRating   Int
+  price       Decimal
+
+  website Website @relation(fields: [websiteName], references: [websiteName])
 
   @@index([websiteName])
 }
